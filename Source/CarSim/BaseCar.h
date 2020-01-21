@@ -105,27 +105,35 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//Function that gets called each frame based on Door curve for Door1
+	UFUNCTION()
 	void ControlLeftDoor();
 
 	//Function that gets called after the Doorcurve is complete for Door1
+	UFUNCTION()
 	void SetLeftDoorState();
 
 	//Function that gets called each frame based on Door curve for Door2
+	UFUNCTION()
 	void ControlRightDoor();
 
 	//Function that gets called after the Doorcurve is complete for Door2
+	UFUNCTION()
 	void SetRightDoorState();
 
 	//Function that gets called each frame based on HoodCurve
+	UFUNCTION()
 	void ControlHood();
 
 	//Function that gets called after the Hoodcurve is complete
+	UFUNCTION()
 	void SetHoodState();
 
 	//Function that gets called each frame based on Trunk curve
+	UFUNCTION()
 	void ControlTrunk();
 
 	//Function that gets called after the Trunkcurve is complete
+	UFUNCTION()
 	void SetTrunkState();
 
 	//Function to switch the rotation axis
