@@ -13,18 +13,46 @@ ABaseCar::ABaseCar()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bReplicates = true;
+
 	BaseCarMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseCarMesh"));				//Creating/Assigning MeshComponent to the mesh pointers
 	RootComponent = BaseCarMesh;
 	BaseCarMesh->SetMobility(EComponentMobility::Static);
 
-	LeftDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftDoorMesh"));
-	LeftDoorMesh->SetupAttachment(RootComponent);
-	LeftDoorMesh->SetMobility(EComponentMobility::Movable);
+																									//Door & Window Meshes
+	LeftFrontDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftFrontDoorMesh"));
+	LeftFrontDoorMesh->SetupAttachment(RootComponent);
+	LeftFrontDoorMesh->SetMobility(EComponentMobility::Movable);
 
-	RightDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightDoorMesh"));
-	RightDoorMesh->SetupAttachment(RootComponent);
-	RightDoorMesh->SetMobility(EComponentMobility::Movable);
+	LeftFrontWindowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftFrontWindowMesh"));
+	LeftFrontWindowMesh->SetupAttachment(LeftFrontDoorMesh);
+	LeftFrontWindowMesh->SetMobility(EComponentMobility::Movable);
 
+	LeftBackDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftBackDoorMesh"));
+	LeftBackDoorMesh->SetupAttachment(RootComponent);
+	LeftBackDoorMesh->SetMobility(EComponentMobility::Movable);
+
+	LeftBackWindowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftBackWindowMesh"));
+	LeftBackWindowMesh->SetupAttachment(LeftBackDoorMesh);
+	LeftBackWindowMesh->SetMobility(EComponentMobility::Movable);
+
+	RightFrontDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontDoorMesh"));
+	RightFrontDoorMesh->SetupAttachment(RootComponent);
+	RightFrontDoorMesh->SetMobility(EComponentMobility::Movable);
+	
+	RightFrontWindowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontWindowMesh"));
+	RightFrontWindowMesh->SetupAttachment(RightFrontDoorMesh);
+	RightFrontWindowMesh->SetMobility(EComponentMobility::Movable);
+
+	RightBackDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightBackDoorMesh"));
+	RightBackDoorMesh->SetupAttachment(RootComponent);
+	RightBackDoorMesh->SetMobility(EComponentMobility::Movable);
+
+	RightBackWindowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightBackWindowMesh"));
+	RightBackWindowMesh->SetupAttachment(RightBackDoorMesh);
+	RightBackWindowMesh->SetMobility(EComponentMobility::Movable);
+
+	//Hood & Trunk Meshes
 	TrunkMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TrunkMesh"));
 	TrunkMesh->SetupAttachment(RootComponent);
 	TrunkMesh->SetMobility(EComponentMobility::Movable);
@@ -33,7 +61,48 @@ ABaseCar::ABaseCar()
 	HoodMesh->SetupAttachment(RootComponent);
 	HoodMesh->SetMobility(EComponentMobility::Movable);
 
-	LeftDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Door1BoxCollider"));		//Assigning a static box component
+	SteeringMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SteeringMesh"));
+	SteeringMesh->SetupAttachment(RootComponent);
+	SteeringMesh->SetMobility(EComponentMobility::Movable);
+
+	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
+	GearMesh->SetupAttachment(RootComponent);
+	GearMesh->SetMobility(EComponentMobility::Movable);
+
+	//Wheel & Their Rims Meshes
+	LeftFrontWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftFrontWheel"));
+	LeftFrontWheel->SetupAttachment(RootComponent);
+	LeftFrontWheel->SetMobility(EComponentMobility::Movable);
+
+	LeftBackWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftBackWheel"));
+	LeftBackWheel->SetupAttachment(RootComponent);
+	LeftBackWheel->SetMobility(EComponentMobility::Movable);
+
+	RightFrontWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontWheel"));
+	RightFrontWheel->SetupAttachment(RootComponent);
+	RightFrontWheel->SetMobility(EComponentMobility::Movable);
+
+	RightBackWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightBackWheel"));
+	RightBackWheel->SetupAttachment(RootComponent);
+	RightBackWheel->SetMobility(EComponentMobility::Movable);
+
+	LeftFrontWheelRim = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftFrontWheelRim"));
+	LeftFrontWheelRim->SetupAttachment(LeftFrontWheel);
+	LeftFrontWheelRim->SetMobility(EComponentMobility::Movable);
+
+	LeftBackWheelRim = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftBackWheelRim"));
+	LeftBackWheelRim->SetupAttachment(LeftBackWheel);
+	LeftBackWheelRim->SetMobility(EComponentMobility::Movable);
+
+	RightFrontWheelRim = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontWheelRim"));
+	RightFrontWheelRim->SetupAttachment(RightFrontWheel);
+	RightFrontWheelRim->SetMobility(EComponentMobility::Movable);
+
+	RightBackWheelRim = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightBackWheelRim"));
+	RightBackWheelRim->SetupAttachment(RightBackWheel);
+	RightBackWheelRim->SetMobility(EComponentMobility::Movable);
+
+	LeftDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Door1BoxCollider"));			//Assigning a static box component
 	LeftDoorOBox->SetupAttachment(RootComponent);
 	LeftDoorOBox->SetCollisionProfileName("Trigger");										//Setting its collision preset to be trigger
 	LeftDoorOBox->SetMobility(EComponentMobility::Static);
@@ -54,50 +123,101 @@ ABaseCar::ABaseCar()
 	TrunkOBox->SetMobility(EComponentMobility::Static);
 
 	HoodIsFlipped = false;
+	Has4Doors = false;
 
-	CanRotateLeftDoor = true;																//Variables to check of the mesh can be rotated i.e. avoids interfering with the mesh if it is being rotated
-	CanRotateRightDoor = true;
+	CanRotateLeftFrontDoor = true;													//Variables to check of the mesh can be rotated i.e. avoids interfering with the mesh if it is being rotated
+	CanRotateLeftFrontWindow = true;
+	CanRotateLeftBackDoor = true;
+	CanRotateLeftBackWindow = true;
+	CanRotateRightFrontDoor = true;
+	CanRotateRightFrontWindow = true;
+	CanRotateRightBackDoor = true;
+	CanRotateRightBackWindow = true;
 	CanRotateHood = true;
 	CanRotateTrunk = true;
 
-	IsLeftDoorOpen = false;																//Variables to check if the car parts are in opened state
-	IsRightDoorOpen = false;
+	IsLeftFrontDoorOpen = false;												//Variables to check if the car parts are in opened state
+	IsLeftFrontWindowOpen = false;
+	IsLeftBackDoorOpen = false;
+	IsLeftBackWindowOpen = false;
+	IsRightFrontDoorOpen = false;
+	IsRightFrontWindowOpen = false;
+	IsRightBackDoorOpen = false;
+	IsRightBackWindowOpen = false;
 	IsHoodOpen = false;
 	IsTrunkOpen = false;
 
 	CurveFloatValue = 0;
 
+	LeftFrontDoorTimeline = NULL;											//Setting Timelines to NULL
+	LeftFrontWindowTimeline = NULL;
+	LeftBackDoorTimeline = NULL;
+	LeftBackWindowTimeline = NULL;
+	RightFrontDoorTimeline = NULL;
+	RightFrontWindowTimeline = NULL;
+	RightBackDoorTimeline = NULL;
+	RightBackWindowTimeline = NULL;
+	HoodTimeline = NULL;
+	TrunkTimeline = NULL;
 }
 // Called when the game starts or when spawned
 void ABaseCar::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (DoorCurve)																					//Checking if the curves exist then binding functions to it
+	if (DoorCurve)															//Checking if the curves exist then binding functions to it
 	{
-		FOnTimelineFloat Door1Callback;
-		FOnTimelineEventStatic Door1FinishedCallback;
+		FrontDoorBindFunc();												//Calling function to bind the front doors timeline
+		if (Has4Doors)														//Do if Car has 4 Doors
+		{																					//Binding The Back Door Functions
+			FOnTimelineFloat LeftBackDoorCallback;
+			FOnTimelineEventStatic LeftBackDoorFinishedCallback;
 
-		FOnTimelineFloat Door2Callback;
-		FOnTimelineEventStatic Door2FinishedCallback;
+			FOnTimelineFloat RightBackDoorCallback;
+			FOnTimelineEventStatic RightBackDoorFinishedCallback;
 
-		Door1Callback.BindUFunction(this, FName("ControlLeftDoor"));
-		Door1FinishedCallback.BindUFunction(this, FName("SetLeftDoorState"));
+			LeftBackDoorCallback.BindUFunction(this, FName("ControlLeftBackDoor"));
+			LeftBackDoorFinishedCallback.BindUFunction(this, FName("SetLeftBackDoorState"));
 
-		Door2Callback.BindUFunction(this, FName("ControlRightDoor"));
-		Door2FinishedCallback.BindUFunction(this, FName("SetRightDoorState"));
+			RightBackDoorCallback.BindUFunction(this, FName("ControlRightBackDoor"));
+			RightBackDoorFinishedCallback.BindUFunction(this, FName("SetRightBackDoorState"));
 
-		LeftDoorTimeline = NewObject<UTimelineComponent>(this, FName("Door1Animation"));
-		LeftDoorTimeline->AddInterpFloat(DoorCurve, Door1Callback);
-		LeftDoorTimeline->SetTimelineFinishedFunc(Door1FinishedCallback);
-		LeftDoorTimeline->RegisterComponent();
+			LeftBackDoorTimeline = NewObject<UTimelineComponent>(this, FName("LeftBackDoorAnimation"));
+			LeftBackDoorTimeline->AddInterpFloat(DoorCurve, LeftBackDoorCallback);
+			LeftBackDoorTimeline->SetTimelineFinishedFunc(LeftBackDoorFinishedCallback);
+			LeftBackDoorTimeline->RegisterComponent();
 
-		RightDoorTimeline = NewObject<UTimelineComponent>(this, FName("Door2Animation"));
-		RightDoorTimeline->AddInterpFloat(DoorCurve, Door2Callback);
-		RightDoorTimeline->SetTimelineFinishedFunc(Door2FinishedCallback);
-		RightDoorTimeline->RegisterComponent();
-
+			RightBackDoorTimeline = NewObject<UTimelineComponent>(this, FName("RightBackDoorAnimation"));
+			RightBackDoorTimeline->AddInterpFloat(DoorCurve, RightBackDoorCallback);
+			RightBackDoorTimeline->SetTimelineFinishedFunc(RightBackDoorFinishedCallback);
+			RightBackDoorTimeline->RegisterComponent();
+		}
+		else
+		{
+			//Destroy static meshes
+			//Delete Timeline
+			LeftBackDoorMesh->DestroyComponent();
+			RightBackDoorMesh->DestroyComponent();
+			LeftBackDoorTimeline = NULL;
+			RightBackDoorTimeline = NULL;
+		}
 	}
+	if ((WindowXCurve != NULL) && (WindowZCurve != NULL))
+	{
+		FrontWindowBindFunc();
+		if (Has4Doors)
+		{
+
+		}
+		else
+		{
+			LeftBackWindowMesh->DestroyComponent();
+			RightBackWindowMesh->DestroyComponent();
+			LeftBackWindowTimeline = NULL;
+			RightBackWindowTimeline = NULL;
+		}
+	}
+
 	if (HoodCurve)
 	{
 		FOnTimelineFloat HoodCallback;
@@ -123,9 +243,7 @@ void ABaseCar::BeginPlay()
 		TrunkTimeline->AddInterpFloat(TrunkCurve, TrunkCallback);
 		TrunkTimeline->SetTimelineFinishedFunc(TrunkFinishedCallback);
 		TrunkTimeline->RegisterComponent();
-	}
-
-	
+	}	
 }
 
 // Called every frame
@@ -133,14 +251,27 @@ void ABaseCar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (LeftDoorTimeline != NULL)																							//Allowing the timeline events to tick so that they can be called on each frame
+	if (Has4Doors)
 	{
-		LeftDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+		if (LeftBackDoorTimeline != NULL)																							//Allowing the timeline events to tick so that they can be called on each frame
+		{
+			LeftBackDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+		}
+
+		if (RightBackDoorTimeline != NULL)
+		{
+			RightBackDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+		}
 	}
 
-	if (RightDoorTimeline != NULL)
+	if (LeftFrontDoorTimeline != NULL)																							//Allowing the timeline events to tick so that they can be called on each frame
 	{
-		RightDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+		LeftFrontDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+	}
+
+	if (RightFrontDoorTimeline != NULL)
+	{
+		RightFrontDoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
 	}
 
 	if (HoodTimeline != NULL)
@@ -154,29 +285,84 @@ void ABaseCar::Tick(float DeltaTime)
 	}
 }
 
-void ABaseCar::ControlLeftDoor()
+void ABaseCar::FrontDoorBindFunc()
 {
-	CurveFloatValue = DoorCurve->GetFloatValue(LeftDoorTimeline->GetPlaybackPosition());								//Get the current position's float value from the timeline
-	LeftDoorMesh->SetRelativeRotation(SwitchAxis(Door1Rotation.GetValue()));
+	FOnTimelineFloat LeftFrontDoorCallback;
+	FOnTimelineEventStatic LeftFrontDoorFinishedCallback;
+
+	FOnTimelineFloat RightFrontDoorCallback;
+	FOnTimelineEventStatic RightFrontDoorFinishedCallback;
+
+	LeftFrontDoorCallback.BindUFunction(this, FName("ControlLeftFrontDoor"));
+	LeftFrontDoorFinishedCallback.BindUFunction(this, FName("SetLeftFrontDoorState"));
+
+	RightFrontDoorCallback.BindUFunction(this, FName("ControlRightFrontDoor"));
+	RightFrontDoorFinishedCallback.BindUFunction(this, FName("SetRightFrontDoorState"));
+
+	LeftFrontDoorTimeline = NewObject<UTimelineComponent>(this, FName("LeftFrontDoorAnimation"));
+	LeftFrontDoorTimeline->AddInterpFloat(DoorCurve, LeftFrontDoorCallback);
+	LeftFrontDoorTimeline->SetTimelineFinishedFunc(LeftFrontDoorFinishedCallback);
+	LeftFrontDoorTimeline->RegisterComponent();
+
+	RightFrontDoorTimeline = NewObject<UTimelineComponent>(this, FName("RightFrontDoorAnimation"));
+	RightFrontDoorTimeline->AddInterpFloat(DoorCurve, RightFrontDoorCallback);
+	RightFrontDoorTimeline->SetTimelineFinishedFunc(RightFrontDoorFinishedCallback);
+	RightFrontDoorTimeline->RegisterComponent();
 }
 
-void ABaseCar::SetLeftDoorState()																						//Function gets called after the timeline is finished executing completely
+void ABaseCar::FrontWindowBindFunc()
 {
-	CanRotateLeftDoor = true;
 }
 
-void ABaseCar::ControlRightDoor()																						//Get The Current position float value from the timeline
+//MOVING THE LEFT DOORS
+void ABaseCar::ControlLeftFrontDoor()
+{
+	CurveFloatValue = DoorCurve->GetFloatValue(LeftFrontDoorTimeline->GetPlaybackPosition());								//Get the current position's float value from the timeline
+	LeftFrontDoorMesh->SetRelativeRotation(SwitchAxis(LeftFrontDoorRotation.GetValue()));
+}
+
+void ABaseCar::SetLeftFrontDoorState()																						//Function gets called after the timeline is finished executing completely
+{
+	CanRotateLeftFrontDoor = true;
+}
+
+void ABaseCar::ControlLeftBackDoor()
+{
+	CurveFloatValue = DoorCurve->GetFloatValue(LeftBackDoorTimeline->GetPlaybackPosition());								//Get the current position's float value from the timeline
+	LeftBackDoorMesh->SetRelativeRotation(SwitchAxis(LeftBackDoorRotation.GetValue()));
+}
+
+void ABaseCar::SetLeftBackDoorState()																						//Function gets called after the timeline is finished executing completely
+{
+	CanRotateLeftBackDoor = true;
+}
+
+//MOVING THE RIGHT DOOR
+void ABaseCar::ControlRightFrontDoor()																						//Get The Current position float value from the timeline
 {
 	//Get the current position's float value from the timeline
-	CurveFloatValue = DoorCurve->GetFloatValue(RightDoorTimeline->GetPlaybackPosition());
-	RightDoorMesh->SetRelativeRotation(SwitchAxis(Door2Rotation.GetValue()));
+	CurveFloatValue = DoorCurve->GetFloatValue(RightFrontDoorTimeline->GetPlaybackPosition());
+	RightFrontDoorMesh->SetRelativeRotation(SwitchAxis(RightFrontDoorRotation.GetValue()));
 }
 
-void ABaseCar::SetRightDoorState()																						//Function gets called after the LeftDoorTimeline is finished executing completely
+void ABaseCar::SetRightFrontDoorState()																						//Function gets called after the LeftDoorTimeline is finished executing completely
 {
-	CanRotateRightDoor = true;
+	CanRotateRightFrontDoor = true;
 }
 
+void ABaseCar::ControlRightBackDoor()																						//Get The Current position float value from the timeline
+{
+	//Get the current position's float value from the timeline
+	CurveFloatValue = DoorCurve->GetFloatValue(RightBackDoorTimeline->GetPlaybackPosition());
+	RightBackDoorMesh->SetRelativeRotation(SwitchAxis(RightBackDoorRotation.GetValue()));
+}
+
+void ABaseCar::SetRightBackDoorState()																						//Function gets called after the LeftDoorTimeline is finished executing completely
+{
+	CanRotateRightBackDoor = true;
+}
+
+//MOVING HOOD & TRUNK
 void ABaseCar::ControlHood()
 {
 	//Get the current position's float value from the timeline
@@ -207,52 +393,95 @@ FQuat ABaseCar::SwitchAxis(int MyAxis)
 	switch (MyAxis)																						//Settting the rotation value to the axis in which the mesh is to rotate
 	{
 	case 0: NewRotation = FQuat(FRotator(CurveFloatValue, 0.0f, 0.0f));
-			break;
-	case 1: NewRotation = FQuat(FRotator(0.0f, CurveFloatValue, 0.0f));
-			break;
-	case 2: NewRotation = FQuat(FRotator(0.0f, 0.0f, CurveFloatValue));
-			break;
+		break;
+	case 1:	NewRotation = FQuat(FRotator(-CurveFloatValue, 0.0f, 0.0f));
+		break;
+	case 2: NewRotation = FQuat(FRotator(0.0f, CurveFloatValue, 0.0f));
+		break;
+	case 3: NewRotation = FQuat(FRotator(0.0f, -CurveFloatValue, 0.0f));
+		break;
+	case 4: NewRotation = FQuat(FRotator(0.0f, 0.0f, CurveFloatValue));
+		break;
+	case 5: NewRotation = FQuat(FRotator(0.0f, 0.0f, -CurveFloatValue));
+		break;
 
 	default:NewRotation = FQuat(FRotator(CurveFloatValue, 0.0f, 0.0f));
-			break;
+		break;
 	}
 	return NewRotation;
 }
 
-void ABaseCar::ToogleLeftDoor()
+//CONTROL THE LEFT DOORS OPENING/CLOSING
+void ABaseCar::ToggleLeftFrontDoor()
 {
-	if (CanRotateLeftDoor && (LeftDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
+	if (CanRotateLeftFrontDoor && (LeftFrontDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
 	{
-		if (!IsLeftDoorOpen)
+		if (!IsLeftFrontDoorOpen)
 		{
-			IsLeftDoorOpen = true;
-			LeftDoorTimeline->PlayFromStart();
+			IsLeftFrontDoorOpen = true;
+			LeftFrontDoorTimeline->PlayFromStart();
 		}
 		else
 		{
-			IsLeftDoorOpen = false;
-			LeftDoorTimeline->Reverse();
+			IsLeftFrontDoorOpen = false;
+			LeftFrontDoorTimeline->Reverse();
 		}
 	}
 }
 
-void ABaseCar::ToogleRightDoor()
+void ABaseCar::ToggleLeftBackDoor()
 {
-	if (CanRotateRightDoor && (RightDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
+	if (CanRotateLeftBackDoor && (LeftBackDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
 	{
-		if (!IsRightDoorOpen)
+		if (!IsLeftBackDoorOpen)
 		{
-			IsRightDoorOpen = true;
-			RightDoorTimeline->PlayFromStart();
+			IsLeftBackDoorOpen = true;
+			LeftBackDoorTimeline->PlayFromStart();
 		}
 		else
 		{
-			IsRightDoorOpen = false;
-			RightDoorTimeline->Reverse();
+			IsLeftBackDoorOpen = false;
+			LeftBackDoorTimeline->Reverse();
 		}
 	}
 }
 
+//CONTROL THE RIGHT DOORS OPENING/CLOSING
+void ABaseCar::ToggleRightFrontDoor()
+{
+	if (CanRotateRightFrontDoor && (RightFrontDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
+	{
+		if (!IsRightFrontDoorOpen)
+		{
+			IsRightFrontDoorOpen = true;
+			RightFrontDoorTimeline->PlayFromStart();
+		}
+		else
+		{
+			IsRightFrontDoorOpen = false;
+			RightFrontDoorTimeline->Reverse();
+		}
+	}
+}
+
+void ABaseCar::ToggleRightBackDoor()
+{
+	if (CanRotateRightBackDoor && (RightBackDoorTimeline != NULL))																//Check to see if the door is currently rotating and do we have the Timeline
+	{
+		if (!IsRightBackDoorOpen)
+		{
+			IsRightBackDoorOpen = true;
+			RightBackDoorTimeline->PlayFromStart();
+		}
+		else
+		{
+			IsRightBackDoorOpen = false;
+			RightBackDoorTimeline->Reverse();
+		}
+	}
+}
+
+//CONTROL THE HOOD & TRUNK OPENING/CLOSING
 void ABaseCar::ToggleHood()
 {
 	if (CanRotateHood && (HoodTimeline != NULL))															//Check to see if the Hood is currently rotating and do we have the Timeline
@@ -286,5 +515,3 @@ void ABaseCar::ToggleTrunk()
 		}
 	}
 }
-
-

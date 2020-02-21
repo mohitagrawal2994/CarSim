@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "BaseCar.h"
+#include "Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACarSimCharacter
@@ -74,6 +76,9 @@ void ACarSimCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACarSimCharacter::OnResetVR);
+
+	// Handles Car Events
+	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &ACarSimCharacter::Action);
 }
 
 
@@ -131,4 +136,52 @@ void ACarSimCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ACarSimCharacter::Action()
+{
+	if (Role == ROLE_Authority)
+	{
+		ToggleCarParts();
+	}
+	else
+	{
+		AllowToggleCarParts();
+	}
+
+}
+
+void ACarSimCharacter::AllowToggleCarParts_Implementation()
+{
+	ToggleCarParts();
+}
+
+bool ACarSimCharacter::AllowToggleCarParts_Validate()
+{
+	return true;
+}
+
+void ACarSimCharacter::ToggleCarParts_Implementation()
+{
+	FoundCars.Empty();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCar::StaticClass(), FoundCars);
+
+	if (FoundCars.Num() > 0)
+	{
+		MyCar = Cast<ABaseCar>(FoundCars[0]);
+	}
+	if (MyCar != NULL)
+	{
+		MyCar->ToggleLeftFrontDoor();
+		MyCar->ToggleLeftBackDoor();
+		MyCar->ToggleRightFrontDoor();
+		MyCar->ToggleRightBackDoor();
+		MyCar->ToggleHood();
+		MyCar->ToggleTrunk();
+	}
+}
+
+bool ACarSimCharacter::ToggleCarParts_Validate()
+{
+	return true;
 }

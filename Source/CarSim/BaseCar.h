@@ -10,8 +10,11 @@ UENUM(Meta = (Bitflags))
 enum RotationAxis
 {
 	XRotation,
+	NegXRotation,
 	YRotation,
-	ZRotation
+	NegYRotation,
+	ZRotation,
+	NegZRotation
 };
 
 UCLASS()
@@ -19,19 +22,37 @@ class CARSIM_API ABaseCar : public AActor
 {
 	GENERATED_BODY()
 
-	class UTimelineComponent* LeftDoorTimeline;
-	class UTimelineComponent* RightDoorTimeline;
+	class UTimelineComponent* LeftFrontDoorTimeline;
+	class UTimelineComponent* LeftFrontWindowTimeline;
+	class UTimelineComponent* LeftBackDoorTimeline;
+	class UTimelineComponent* LeftBackWindowTimeline;
+	class UTimelineComponent* RightFrontDoorTimeline;
+	class UTimelineComponent* RightFrontWindowTimeline;
+	class UTimelineComponent* RightBackDoorTimeline;
+	class UTimelineComponent* RightBackWindowTimeline;
 	class UTimelineComponent* HoodTimeline;
 	class UTimelineComponent* TrunkTimeline;
 
 	//Booleans to control whether meshes can be rotated
-	bool CanRotateLeftDoor;
-	bool CanRotateRightDoor;
+	bool CanRotateLeftFrontDoor;
+	bool CanRotateLeftFrontWindow;
+	bool CanRotateLeftBackDoor;
+	bool CanRotateLeftBackWindow;
+	bool CanRotateRightFrontDoor;
+	bool CanRotateRightFrontWindow;
+	bool CanRotateRightBackDoor;
+	bool CanRotateRightBackWindow;
 	bool CanRotateHood;
 	bool CanRotateTrunk;
 
-	bool IsLeftDoorOpen;
-	bool IsRightDoorOpen;
+	bool IsLeftFrontDoorOpen;
+	bool IsLeftFrontWindowOpen;
+	bool IsLeftBackDoorOpen;
+	bool IsLeftBackWindowOpen;
+	bool IsRightFrontDoorOpen;
+	bool IsRightFrontWindowOpen;
+	bool IsRightBackDoorOpen;
+	bool IsRightBackWindowOpen;
 	bool IsHoodOpen;
 	bool IsTrunkOpen;
 
@@ -43,21 +64,83 @@ protected:
 
 public:
 
+	//Bool to check whether the car's hood and trunk position are opposite to each other i.e the trunk is in front of the car
+	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
+	bool HoodIsFlipped;
+
+	//Bool to check if the car has 4 doors
+	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
+	bool Has4Doors;
+
 	//Mesh to hold the parts of the car
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* BaseCarMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
-	class UStaticMeshComponent* LeftDoorMesh;
+	class UStaticMeshComponent* LeftFrontDoorMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
-	class UStaticMeshComponent* RightDoorMesh;
+	class UStaticMeshComponent* LeftFrontWindowMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftBackDoorMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftBackWindowMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightFrontDoorMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightFrontWindowMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightBackDoorMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightBackWindowMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* HoodMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* TrunkMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* SteeringMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* GearMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftFrontWheel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftBackWheel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightFrontWheel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightBackWheel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftFrontWheelRim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* LeftBackWheelRim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightFrontWheelRim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	class UStaticMeshComponent* RightBackWheelRim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Array")
+	TArray<UStaticMesh*> WheelArray;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Array")
+	TArray<UStaticMesh*> RimArray;
 
 	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
 	class UBoxComponent* LeftDoorOBox;
@@ -71,16 +154,18 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
 	class UBoxComponent* HoodOBox;
 
-	//Bool to check whether the car's hood and trunk position are opposite to each other i.e the trunk is in front of the car
-	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
-	bool HoodIsFlipped;
-
 	//Enum properties to store on which axis should the mesh be rotated as it can differ based on the creation of the object
 	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
-	TEnumAsByte<RotationAxis> Door1Rotation;
+	TEnumAsByte<RotationAxis> LeftFrontDoorRotation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
-	TEnumAsByte<RotationAxis> Door2Rotation;
+	TEnumAsByte<RotationAxis> LeftBackDoorRotation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
+	TEnumAsByte<RotationAxis> RightFrontDoorRotation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
+	TEnumAsByte<RotationAxis> RightBackDoorRotation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
 	TEnumAsByte<RotationAxis> HoodRotation;
@@ -91,6 +176,12 @@ public:
 	//Curves to hold the aniation playback time and door rotation axis setting
 	UPROPERTY(EditDefaultsOnly, Category = "Curves")
 	class UCurveFloat* DoorCurve;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Curves")
+	class UCurveFloat* WindowXCurve;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Curves")
+	class UCurveFloat* WindowZCurve;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Curves")
 	class UCurveFloat* HoodCurve;
@@ -104,21 +195,45 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//Function that gets called each frame based on Door curve for Door1
+	//Function to call front doors Timeline Binding functions
 	UFUNCTION()
-	void ControlLeftDoor();
+	void FrontDoorBindFunc();
 
-	//Function that gets called after the Doorcurve is complete for Door1
+	//Function to call front Windows Timeline Binding functions
 	UFUNCTION()
-	void SetLeftDoorState();
+	void FrontWindowBindFunc();
 
-	//Function that gets called each frame based on Door curve for Door2
+	//Function that gets called each frame based on Door curve for LeftFrontDoor
 	UFUNCTION()
-	void ControlRightDoor();
+	void ControlLeftFrontDoor();
 
-	//Function that gets called after the Doorcurve is complete for Door2
+	//Function that gets called after the Doorcurve is complete for LeftFrontDoor
 	UFUNCTION()
-	void SetRightDoorState();
+	void SetLeftFrontDoorState();
+
+	//Function that gets called each frame based on Door curve for LeftBackDoor
+	UFUNCTION()
+	void ControlLeftBackDoor();
+
+	//Function that gets called after the Doorcurve is complete for LeftBackDoor
+	UFUNCTION()
+	void SetLeftBackDoorState();
+
+	//Function that gets called each frame based on Door curve for RightFrontDoor
+	UFUNCTION()
+	void ControlRightFrontDoor();
+
+	//Function that gets called after the Doorcurve is complete for RightFrontDoor
+	UFUNCTION()
+	void SetRightFrontDoorState();
+
+	//Function that gets called each frame based on Door curve for RightBackDoor
+	UFUNCTION()
+	void ControlRightBackDoor();
+
+	//Function that gets called after the Doorcurve is complete for RightBackDoor
+	UFUNCTION()
+	void SetRightBackDoorState();
 
 	//Function that gets called each frame based on HoodCurve
 	UFUNCTION()
@@ -139,15 +254,21 @@ public:
 	//Function to switch the rotation axis
 	FQuat SwitchAxis(int MyAxis);
 
-	//UFUNCTION(NetMulticast)
-	void ToogleLeftDoor();
+	UFUNCTION()
+	void ToggleLeftFrontDoor();
 
-	//UFUNCTION(NetMulticast)
-	void ToogleRightDoor();
+	UFUNCTION()
+	void ToggleLeftBackDoor();
 
-	//UFUNCTION(NetMulticast)
+	UFUNCTION()
+	void ToggleRightFrontDoor();
+
+	UFUNCTION()
+	void ToggleRightBackDoor();
+
+	UFUNCTION()
 	void ToggleHood();
 
-	//UFUNCTION(NetMulticast)
+	UFUNCTION()
 	void ToggleTrunk();
 };
