@@ -106,8 +106,29 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* TrunkMesh;
 
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* LeftFrontDoorOBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* LeftBackDoorOBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* RightFrontDoorOBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* RightBackDoorOBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* TrunkOBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* HoodOBox;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* SteeringMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
+	class UBoxComponent* SteeringOBox;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	class UStaticMeshComponent* GearMesh;
@@ -141,18 +162,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Array")
 	TArray<UStaticMesh*> RimArray;
-
-	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
-	class UBoxComponent* LeftDoorOBox;
-
-	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
-	class UBoxComponent* RightDoorOBox;
-
-	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
-	class UBoxComponent* TrunkOBox;
-
-	UPROPERTY(EditDefaultsOnly, Category = "BoxComponent")
-	class UBoxComponent* HoodOBox;
 
 	//Enum properties to store on which axis should the mesh be rotated as it can differ based on the creation of the object
 	UPROPERTY(EditDefaultsOnly, Category = "MeshDetails")
@@ -203,7 +212,7 @@ public:
 	UFUNCTION()
 	void FrontWindowBindFunc();
 
-	//Function that gets called each frame based on Door curve for LeftFrontDoor
+	//unction that gets called each frame based on Door curve for LeftFrontDoor
 	UFUNCTION()
 	void ControlLeftFrontDoor();
 

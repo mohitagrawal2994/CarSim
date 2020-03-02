@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BaseCar.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
@@ -18,8 +17,7 @@ ABaseCar::ABaseCar()
 	BaseCarMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseCarMesh"));				//Creating/Assigning MeshComponent to the mesh pointers
 	RootComponent = BaseCarMesh;
 	BaseCarMesh->SetMobility(EComponentMobility::Static);
-
-																									//Door & Window Meshes
+	//Door & Window Meshes
 	LeftFrontDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftFrontDoorMesh"));
 	LeftFrontDoorMesh->SetupAttachment(RootComponent);
 	LeftFrontDoorMesh->SetMobility(EComponentMobility::Movable);
@@ -39,7 +37,7 @@ ABaseCar::ABaseCar()
 	RightFrontDoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontDoorMesh"));
 	RightFrontDoorMesh->SetupAttachment(RootComponent);
 	RightFrontDoorMesh->SetMobility(EComponentMobility::Movable);
-	
+
 	RightFrontWindowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightFrontWindowMesh"));
 	RightFrontWindowMesh->SetupAttachment(RightFrontDoorMesh);
 	RightFrontWindowMesh->SetMobility(EComponentMobility::Movable);
@@ -61,9 +59,37 @@ ABaseCar::ABaseCar()
 	HoodMesh->SetupAttachment(RootComponent);
 	HoodMesh->SetMobility(EComponentMobility::Movable);
 
+	LeftFrontDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("LFDoorOverlapBox"));			//Assigning a static box component
+	LeftFrontDoorOBox->SetupAttachment(LeftFrontDoorMesh);
+	LeftFrontDoorOBox->SetMobility(EComponentMobility::Movable);
+
+	LeftBackDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("LBDoorOverlapBox"));			//Assigning a static box component
+	LeftBackDoorOBox->SetupAttachment(LeftBackDoorMesh);
+	LeftBackDoorOBox->SetMobility(EComponentMobility::Movable);
+
+	RightFrontDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("RFDoorOverlapBox"));		//Assigning a static box component
+	RightFrontDoorOBox->SetupAttachment(RightFrontDoorMesh);
+	RightFrontDoorOBox->SetMobility(EComponentMobility::Movable);
+
+	RightBackDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("RBDoorOverlapBox"));		//Assigning a static box component
+	RightBackDoorOBox->SetupAttachment(RightBackDoorMesh);
+	RightBackDoorOBox->SetMobility(EComponentMobility::Movable);
+
+	HoodOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HoodOverlapBox"));			//Assigning a static box component
+	HoodOBox->SetupAttachment(RootComponent);
+	HoodOBox->SetMobility(EComponentMobility::Movable);
+
+	TrunkOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TrunkOverlapBox"));		//Assigning a static box component
+	TrunkOBox->SetupAttachment(RootComponent);
+	TrunkOBox->SetMobility(EComponentMobility::Movable);
+
 	SteeringMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SteeringMesh"));
 	SteeringMesh->SetupAttachment(RootComponent);
 	SteeringMesh->SetMobility(EComponentMobility::Movable);
+
+	SteeringOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SteeringOverlapBox"));		//Assigning a static box component
+	SteeringOBox->SetupAttachment(SteeringMesh);
+	SteeringOBox->SetMobility(EComponentMobility::Movable);
 
 	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
 	GearMesh->SetupAttachment(RootComponent);
@@ -101,26 +127,6 @@ ABaseCar::ABaseCar()
 	RightBackWheelRim = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightBackWheelRim"));
 	RightBackWheelRim->SetupAttachment(RightBackWheel);
 	RightBackWheelRim->SetMobility(EComponentMobility::Movable);
-
-	LeftDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Door1BoxCollider"));			//Assigning a static box component
-	LeftDoorOBox->SetupAttachment(RootComponent);
-	LeftDoorOBox->SetCollisionProfileName("Trigger");										//Setting its collision preset to be trigger
-	LeftDoorOBox->SetMobility(EComponentMobility::Static);
-
-	RightDoorOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Door2BoxCollider"));		//Assigning a static box component
-	RightDoorOBox->SetupAttachment(RootComponent);
-	RightDoorOBox->SetCollisionProfileName("Trigger");										//Setting its collision preset to be trigger
-	RightDoorOBox->SetMobility(EComponentMobility::Static);
-
-	HoodOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HoodBoxCollider"));			//Assigning a static box component
-	HoodOBox->SetupAttachment(RootComponent);
-	HoodOBox->SetCollisionProfileName("Trigger");										//Setting its collision preset to be trigger
-	HoodOBox->SetMobility(EComponentMobility::Static);
-
-	TrunkOBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TrunkBoxCollider"));		//Assigning a static box component
-	TrunkOBox->SetupAttachment(RootComponent);
-	TrunkOBox->SetCollisionProfileName("Trigger");										//Setting its collision preset to be trigger
-	TrunkOBox->SetMobility(EComponentMobility::Static);
 
 	HoodIsFlipped = false;
 	Has4Doors = false;
@@ -243,7 +249,7 @@ void ABaseCar::BeginPlay()
 		TrunkTimeline->AddInterpFloat(TrunkCurve, TrunkCallback);
 		TrunkTimeline->SetTimelineFinishedFunc(TrunkFinishedCallback);
 		TrunkTimeline->RegisterComponent();
-	}	
+	}
 }
 
 // Called every frame
